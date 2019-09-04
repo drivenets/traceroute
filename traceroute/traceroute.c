@@ -709,9 +709,10 @@ int main (int argc, char *argv[]) {
 static void print_header (void) {
 
 	/*  Note, without ending new-line!  */
-	printf ("Type escape sequence to abort.\n"
-			"Tracing the route to %s",
-			addr2str (&dst_addr));
+	printf ("traceroute to %s (%s), %u hops max, %zu byte packets\n",
+                dst_name, addr2str (&dst_addr), max_hops,
+                header_len + data_len);
+
 	fflush (stdout);
 }
 
@@ -726,7 +727,7 @@ static void print_addr (sockaddr_any *res) {
 
 
 	if (noresolve)
-		printf (" %-16s", str);
+		printf (" %s", str);
 	else {
 	    char buf[1024];
 
@@ -746,9 +747,9 @@ static void print_probe (probe *pb) {
 	unsigned int ttl = idx / probes_per_hop + 1;
 	unsigned int np = idx % probes_per_hop;
 
-	if (ttl == 1)
-		printf ("%2u ", np + 1);
-	else 
+	if (np == 0)
+		printf ("%2u ", ttl);
+	else
 		printf("   ");
 
 
@@ -999,29 +1000,6 @@ static void poll_callback (int fd, int revents) {
 }
 
 
-static void print_probes(void) {
-	int j, i, hops, n=0;
-
-	print_end();
-	while (!probes[++n].final);
-	hops = n / probes_per_hop + 1;
-
-	for (i=0; i<probes_per_hop; i++)
-	{
-		for (j=0; j<hops; j++)
-		{
-			int index = j * probes_per_hop + i;
-			probe *pb = &probes[index];
-			if (pb->done && index < num_probes)
-				print_probe(pb);
-			//double diff = pb->recv_time - pb->send_time;
-			//print_addr(&pb->res);
-			//printf ("  %.3f ms\n", diff * 1000);
-		}
-	}	
-}
-
-
 static void do_it (void) {
 	int start = (first_hop - 1) * probes_per_hop;
 	int end = num_probes;
@@ -1057,7 +1035,7 @@ static void do_it (void) {
 		if (pb->done) {
 
 		    if (n == start) {	/*  can print it now   */
-			//print_probe(pb);
+			print_probe (pb);
 			start++;
 		    }
 
@@ -1109,7 +1087,6 @@ static void do_it (void) {
 	}
 
 
-	print_probes();
 	print_end ();
 
 	return;
