@@ -784,9 +784,14 @@ static void print_probe (probe *pb) {
 }
 
 
-static void print_end (void) {
+static void print_end (int result) {
 
-	printf ("\n");
+	if (result)
+        printf("\nTrace successful\n");
+    else
+        printf ("\nTrace failed\n");
+
+    printf ("\n");
 }
 
 
@@ -1004,6 +1009,7 @@ static void do_it (void) {
 	int start = (first_hop - 1) * probes_per_hop;
 	int end = num_probes;
 	double last_send = 0;
+    int dst_reached = 0;
 
 	print_header ();
 
@@ -1039,8 +1045,11 @@ static void do_it (void) {
 			start++;
 		    }
 
-		    if (pb->final)
+		    if (pb->final) {
 			end = (n / probes_per_hop + 1) * probes_per_hop;
+            if (equal_addr(&pb->res, &dst_addr))
+                    dst_reached = 1;
+            }
 
 		    continue;
 		}
@@ -1087,7 +1096,7 @@ static void do_it (void) {
 	}
 
 
-	print_end ();
+	print_end (dst_reached);
 
 	return;
 }
