@@ -787,11 +787,11 @@ static void print_probe (probe *pb) {
 static void print_end (int result) {
 
 	if (result)
-        printf("\nTrace successful\n");
-    else
-        printf ("\nTrace failed\n");
+		printf("\nTrace successful\n");
+	else
+		printf("\nTrace failed\n");
 
-    printf ("\n");
+	printf("\n");
 }
 
 
