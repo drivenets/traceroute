@@ -1045,13 +1045,13 @@ static void do_it (void) {
 			start++;
 		    }
 
-		    if (pb->final) {
-			end = (n / probes_per_hop + 1) * probes_per_hop;
-            if (equal_addr(&pb->res, &dst_addr))
-                    dst_reached = 1;
-            }
+			if (pb->final) {
+				end = (n / probes_per_hop + 1) * probes_per_hop;
+				if (equal_addr(&pb->res, &dst_addr))
+					dst_reached = 1;
+			}
 
-		    continue;
+			continue;
 		}
 
 
