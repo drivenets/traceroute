@@ -1009,7 +1009,7 @@ static void do_it (void) {
 	int start = (first_hop - 1) * probes_per_hop;
 	int end = num_probes;
 	double last_send = 0;
-    int dst_reached = 0;
+	int dst_reached = 0;
 
 	print_header ();
 
@@ -1040,10 +1040,10 @@ static void do_it (void) {
 
 		if (pb->done) {
 
-		    if (n == start) {	/*  can print it now   */
-			print_probe (pb);
-			start++;
-		    }
+			if (n == start) { /*  can print it now   */
+				print_probe(pb);
+				start++;
+			}
 
 			if (pb->final) {
 				end = (n / probes_per_hop + 1) * probes_per_hop;
@@ -1053,7 +1053,6 @@ static void do_it (void) {
 
 			continue;
 		}
-
 
 		if (!pb->send_time) {
 		    int ttl;
