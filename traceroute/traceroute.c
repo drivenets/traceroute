@@ -1243,7 +1243,7 @@ void parse_icmp_res (probe *pb, int type, int code, int info) {
 		    case ICMP_UNREACH_PORT:
 			    /*  dest host is reached   */
 			    str = "";
-                dst_reached = 1;
+			    dst_reached = 1;
 			    break;
 
 		    case ICMP_UNREACH_PROTOCOL:
@@ -1301,7 +1301,7 @@ void parse_icmp_res (probe *pb, int type, int code, int info) {
 		    case ICMP6_DST_UNREACH_NOPORT:
 			    /*  dest host is reached   */
 			    str = "";
-                dst_reached = 1;
+			    dst_reached = 1;
 			    break;
 
 		    default:
