@@ -137,6 +137,7 @@ static int af = 0;
 
 static probe *probes = NULL;
 static unsigned int num_probes = 0;
+static int dst_reached = 0;
 
 
 static void ex_error (const char *format, ...) {
@@ -791,7 +792,7 @@ static void print_end (int result) {
 	else
 		printf("\nTrace failed\n");
 
-	printf("\n");
+	printf ("\n");
 }
 
 
@@ -1009,7 +1010,6 @@ static void do_it (void) {
 	int start = (first_hop - 1) * probes_per_hop;
 	int end = num_probes;
 	double last_send = 0;
-	int dst_reached = 0;
 
 	print_header ();
 
@@ -1045,14 +1045,12 @@ static void do_it (void) {
 			start++;
 		    }
 
-		    if (pb->final) {
+		    if (pb->final)
 			end = (n / probes_per_hop + 1) * probes_per_hop;
-			if (equal_addr(&pb->res, &dst_addr))
-				dst_reached = 1;
-		    }
 
 		    continue;
 		}
+
 
 		if (!pb->send_time) {
 		    int ttl;
@@ -1245,6 +1243,7 @@ void parse_icmp_res (probe *pb, int type, int code, int info) {
 		    case ICMP_UNREACH_PORT:
 			    /*  dest host is reached   */
 			    str = "";
+                dst_reached = 1;
 			    break;
 
 		    case ICMP_UNREACH_PROTOCOL:
@@ -1302,6 +1301,7 @@ void parse_icmp_res (probe *pb, int type, int code, int info) {
 		    case ICMP6_DST_UNREACH_NOPORT:
 			    /*  dest host is reached   */
 			    str = "";
+                dst_reached = 1;
 			    break;
 
 		    default:
